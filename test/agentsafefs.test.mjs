@@ -29,6 +29,29 @@ function cleanup(target) {
   fs.rmSync(target, { recursive: true, force: true });
 }
 
+function canonicalTestPath(value) {
+  const absolute = path.resolve(String(value));
+  const suffix = [];
+  let cursor = absolute;
+
+  while (!fs.existsSync(cursor)) {
+    const parent = path.dirname(cursor);
+    if (parent === cursor) break;
+    suffix.unshift(path.basename(cursor));
+    cursor = parent;
+  }
+
+  const base = fs.existsSync(cursor) ? fs.realpathSync.native(cursor) : cursor;
+  const resolved = path.resolve(base, ...suffix).normalize('NFC');
+  return process.platform === 'win32' || process.platform === 'darwin'
+    ? resolved.toLowerCase()
+    : resolved;
+}
+
+function sameCanonicalTestPath(left, right) {
+  return canonicalTestPath(left) === canonicalTestPath(right);
+}
+
 function expectCode(fn, code) {
   assert.throws(fn, (error) => error instanceof AgentSafeFSError && error.code === code);
 }
@@ -677,7 +700,7 @@ test('partial snapshot creation failure is cleaned so the proposal can be retrie
   let snapshotFd = null;
   fs.openSync = function patchedOpenSync(filePath, flags, ...rest) {
     const fd = originalOpenSync.call(fs, filePath, flags, ...rest);
-    if (path.resolve(String(filePath)) === snapshot && flags === 'wx') snapshotFd = fd;
+    if (sameCanonicalTestPath(filePath, snapshot) && flags === 'wx') snapshotFd = fd;
     return fd;
   };
   fs.fsyncSync = function patchedFsyncSync(fd) {
@@ -750,7 +773,7 @@ test('commit recovery never overwrites a third-party change made after mutation'
 
   const originalOpenSync = fs.openSync;
   fs.openSync = function patchedOpenSync(filePath, flags, ...rest) {
-    if (path.resolve(String(filePath)) === audit && flags === 'a') {
+    if (sameCanonicalTestPath(filePath, audit) && flags === 'a') {
       fs.writeFileSync(target, 'THIRD_PARTY');
       const error = new Error('simulated audit failure');
       error.code = 'EIO';
@@ -777,7 +800,7 @@ test('commit recovery never deletes a third-party replacement of a newly created
 
   const originalOpenSync = fs.openSync;
   fs.openSync = function patchedOpenSync(filePath, flags, ...rest) {
-    if (path.resolve(String(filePath)) === audit && flags === 'a') {
+    if (sameCanonicalTestPath(filePath, audit) && flags === 'a') {
       fs.writeFileSync(target, 'THIRD_PARTY');
       const error = new Error('simulated audit failure');
       error.code = 'EIO';
@@ -821,7 +844,7 @@ test('rollback recovery never overwrites a third-party change made after rollbac
 
   const originalOpenSync = fs.openSync;
   fs.openSync = function patchedOpenSync(filePath, flags, ...rest) {
-    if (path.resolve(String(filePath)) === audit && flags === 'a') {
+    if (sameCanonicalTestPath(filePath, audit) && flags === 'a') {
       fs.writeFileSync(target, 'THIRD_PARTY');
       const error = new Error('simulated audit failure');
       error.code = 'EIO';
@@ -852,7 +875,7 @@ test('rollback recovery never overwrites a third-party replacement of a removed 
 
   const originalOpenSync = fs.openSync;
   fs.openSync = function patchedOpenSync(filePath, flags, ...rest) {
-    if (path.resolve(String(filePath)) === audit && flags === 'a') {
+    if (sameCanonicalTestPath(filePath, audit) && flags === 'a') {
       fs.writeFileSync(target, 'THIRD_PARTY');
       const error = new Error('simulated audit failure');
       error.code = 'EIO';
