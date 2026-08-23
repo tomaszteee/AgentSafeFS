@@ -1,0 +1,39 @@
+{
+  "name": "agentsafefs",
+  "version": "0.1.0",
+  "description": "Guarded filesystem writes for AI agents and automation.",
+  "type": "module",
+  "private": true,
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "types": "./src/index.d.ts",
+  "files": [
+    "src/",
+    "README.md",
+    "SECURITY.md",
+    "SCOPE.md",
+    "CHANGELOG.md",
+    "docs/",
+    "LICENSE"
+  ],
+  "keywords": [
+    "ai-agent",
+    "filesystem",
+    "security",
+    "automation",
+    "rollback",
+    "safe-write",
+    "path-traversal"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "test": "node --test",
+    "test:coverage": "node --experimental-test-coverage --test",
+    "check": "node --check src/errors.mjs && node --check src/path-safety.mjs && node --check src/policy.mjs && node --check src/transaction.mjs && node --check src/index.mjs"
+  }
+}

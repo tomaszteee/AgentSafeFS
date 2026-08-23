@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+.agentsafefs/
+.local-shell-mcp/
+oss-config.yaml
+*.log
+*.tgz
+.DS_Store
+Thumbs.db
