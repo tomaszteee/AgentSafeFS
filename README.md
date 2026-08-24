@@ -1,6 +1,26 @@
 # AgentSafeFS
 
-Guarded filesystem writes for AI agents, coding assistants, and automation.
+[![CI](https://github.com/tomaszteee/AgentSafeFS/actions/workflows/ci.yml/badge.svg)](https://github.com/tomaszteee/AgentSafeFS/actions/workflows/ci.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](./LICENSE)
+![Node.js >=22](https://img.shields.io/badge/Node.js-%3E%3D22-339933?logo=node.js&logoColor=white)
+![Status](https://img.shields.io/badge/status-0.1.0%20release%20candidate-orange)
+
+**Guarded filesystem writes for AI agents, coding assistants, MCP tools, and automation.**
+
+AgentSafeFS is a security-focused Node.js library that makes AI-driven file writes explicit, reviewable, conflict-aware, auditable, and rollback-capable — with no runtime dependencies.
+
+It is designed for agentic AI, coding assistants, MCP servers, developer tools, and automation that need to modify a workspace without casually escaping the intended root or overwriting newer data.
+
+## Why AgentSafeFS
+
+- **AI-agent filesystem safety** — separates `propose` from `commit` so writes can be inspected and approved.
+- **Path traversal defense** — blocks `..`, unsafe absolute paths, symlink/junction escapes, hard-link targets, and common Windows path aliases.
+- **Stale-write protection** — hashes targets at proposal time and revalidates before mutation.
+- **Safer mutation pipeline** — sibling temp file, `fsync`, atomic rename where the platform permits it, and SHA-256 readback verification.
+- **Rollback with integrity checks** — restores only when snapshots and current target state still match expectations.
+- **Audit-friendly** — optional fsynced JSONL audit events without file contents or absolute workspace paths.
+- **Cross-platform CI** — tested on Windows, Linux, and macOS with Node.js 22 and 24.
+
 
 AgentSafeFS puts a narrow safety layer between an automated tool and a workspace. A write is split into an inspectable proposal and a separate commit step:
 
