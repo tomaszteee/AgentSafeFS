@@ -1,10 +1,10 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to AgentSafeFS will be documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project intends to use Semantic Versioning.
 
-## [0.1.0] - 2026-08-23
+## [0.1.0] - 2026-08-24
 
 ### Added
 
@@ -24,3 +24,4 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - TypeScript declarations,
 - cross-platform CI configuration and security regression tests,
 - public API, scope, threat-model, contribution, and security documentation.
+
