@@ -7,9 +7,9 @@
 
 **Guarded filesystem writes for AI agents, coding assistants, MCP tools, and automation.**
 
-[API](./docs/API.md) · [Threat model](./docs/THREAT_MODEL.md) · [Security](./SECURITY.md) · [Contributing](./CONTRIBUTING.md) · [Discussions](https://github.com/tomaszteee/AgentSafeFS/discussions)
+[CLI](./docs/CLI.md) · [API](./docs/API.md) · [Threat model](./docs/THREAT_MODEL.md) · [Security](./SECURITY.md) · [Contributing](./CONTRIBUTING.md) · [Discussions](https://github.com/tomaszteee/AgentSafeFS/discussions)
 
-AgentSafeFS is a security-focused Node.js library that makes AI-driven file writes explicit, reviewable, conflict-aware, auditable, and rollback-capable — with no runtime dependencies.
+AgentSafeFS is a security-focused Node.js library **and standalone CLI** that makes AI-driven file writes explicit, reviewable, conflict-aware, auditable, and rollback-capable. The library has no runtime dependencies.
 
 It is designed for agentic AI, coding assistants, MCP servers, developer tools, and automation that need to modify a workspace without casually escaping the intended root or overwriting newer data.
 
@@ -32,9 +32,9 @@ The project intentionally does one thing: make individual file writes harder to 
 
 ## Status
 
-`0.1.0` is the first public security-focused release. The API is small on purpose and may still change before `1.0.0`.
+`0.2.0` adds a standalone CLI and native release binaries while keeping the security-focused API deliberately small. The API and CLI may still evolve before `1.0.0`.
 
-The package is marked `private: true` only to prevent accidental npm publication during the initial GitHub release. The source repository itself is licensed under Apache-2.0.
+The package remains marked `private: true` to prevent accidental npm registry publication. GitHub Releases are the distribution source for the standalone binaries and package archive; the source repository is Apache-2.0 licensed.
 
 ## What it protects against
 
@@ -67,7 +67,32 @@ The package is marked `private: true` only to prevent accidental npm publication
 - Optional audit events are JSONL and do not include file contents or absolute workspace paths.
 - No runtime dependencies.
 
-## Quick start from a clone
+## Standalone CLI
+
+AgentSafeFS can be used without installing Node.js. GitHub Releases publish native single-file executables built from the same guarded-write engine:
+
+| Platform | Asset |
+| --- | --- |
+| Windows x64 | `agentsafefs-windows-x64.exe` |
+| Windows ARM64 | `agentsafefs-windows-arm64.exe` |
+| Linux x64 | `agentsafefs-linux-x64` |
+| Linux ARM64 | `agentsafefs-linux-arm64` |
+| macOS Intel | `agentsafefs-macos-x64` |
+| macOS Apple Silicon | `agentsafefs-macos-arm64` |
+
+Example on Windows:
+
+```powershell
+.\agentsafefs-windows-x64.exe doctor --root C:\workspace
+.\agentsafefs-windows-x64.exe plan --root C:\workspace --target notes.txt --text "hello"
+.\agentsafefs-windows-x64.exe write --root C:\workspace --target notes.txt --text "hello"
+```
+
+Higher-risk writes do not accept a generic `--yes`. They require the exact guarded target through `--approve <path>`. Use `--json` for automation and MCP/tool integration. Configuration files are loaded only when explicitly selected with `--config`, avoiding silent repository-controlled policy changes.
+
+Release assets include SHA-256 checksums, an SPDX SBOM, and GitHub build-provenance attestations. See [docs/CLI.md](./docs/CLI.md) for commands, exit codes, configuration, verification, and platform signing notes.
+
+## Library quick start from a clone
 
 Requires Node.js 22+.
 
@@ -133,7 +158,7 @@ safeFs.rollback(proposal.operationId, {
 
 Rollback is fail-closed. If the target changed after the commit, or if the snapshot no longer has the expected hash, rollback refuses to overwrite the current data.
 
-Rollback metadata is held in memory, so rollback currently requires the same `AgentSafeFS` instance that performed the commit. Snapshot bytes are stored on disk under the configured snapshot directory. `0.1.x` does not automatically prune committed snapshots or rotate audit logs, so long-running integrations should include their own retention/cleanup policy after rollback is no longer required.
+Rollback metadata is held in memory, so rollback currently requires the same `AgentSafeFS` instance that performed the commit. Snapshot bytes are stored on disk under the configured snapshot directory. The CLI therefore does not advertise rollback across separate invocations. Long-running integrations should also define their own snapshot-retention and audit-log rotation policy after rollback is no longer required.
 
 ## Important limits
 
@@ -153,7 +178,7 @@ See [docs/API.md](./docs/API.md).
 npm test
 ```
 
-The suite covers Windows junctions and path aliases, hard links, stale writes, policy/approval behavior, snapshot tampering, rollback conflicts, audit recovery, and binary data. CI runs the suite on Windows, Linux, and macOS.
+The suite covers Windows junctions and path aliases, hard links, stale writes, policy/approval behavior, snapshot tampering, rollback conflicts, audit recovery, binary data, CLI approval behavior, JSON output, config handling, and non-mutating plans. CI runs across Windows, Linux, and macOS.
 
 ## Security
 

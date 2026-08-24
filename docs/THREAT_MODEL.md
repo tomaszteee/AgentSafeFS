@@ -61,6 +61,16 @@ Rollback uses the inverse pattern: if a failure happens after rollback mutation,
 
 If code has filesystem permissions and directly calls `fs.writeFile`, shell commands, native APIs, or another library, AgentSafeFS cannot stop it. Put OS permissions and process isolation around untrusted code.
 
+### CLI input reads
+
+The CLI can obtain replacement content from `--stdin`, `--text`, or `--from <file>`. The guarded security boundary applies to the **write target**. A file named with `--from` is read using the operating-system permissions of the CLI process and is not constrained to the AgentSafeFS workspace root. Do not treat the CLI as a read sandbox.
+
+Configuration is never auto-loaded from the current directory. A policy/root config must be selected explicitly with `--config`, preventing an untrusted repository from silently changing the guarded root or policy merely because the CLI was launched from that directory.
+
+### Standalone executable packaging
+
+The native release binaries use Node.js Single Executable Applications (SEA) to embed the CLI and runtime. Packaging does not add filesystem privileges: the executable has the permissions of the user/process that launches it. Release checksums and build-provenance attestations establish artifact origin/integrity, not a guarantee that the program is vulnerability-free.
+
 ### Hostile concurrent local process / TOCTOU
 
 Portable Node.js does not expose a cross-platform directory-handle/openat transaction API that would make every path-component validation and final rename one indivisible kernel operation. AgentSafeFS narrows the race window with repeated checks but does not claim protection against a hostile process intentionally swapping directory structure at the final instant.
@@ -77,7 +87,7 @@ The log is also not signed or hash-chained. A separate process with write permis
 
 ### Persistence across process restart
 
-Pending and committed operation metadata is intentionally in memory in `0.1.x`. A new process cannot roll back a previous process's operation merely because snapshot bytes remain on disk. Committed records retain post-commit bytes in memory so rollback recovery can restore them; large or numerous outstanding committed operations therefore consume memory. Committed snapshots are not automatically pruned, and audit logs are not automatically rotated; integrations are responsible for retention once rollback/history is no longer required.
+Pending and committed operation metadata is intentionally in memory in `0.2.x`. A new process cannot roll back a previous process's operation merely because snapshot bytes remain on disk. Committed records retain post-commit bytes in memory so rollback recovery can restore them; large or numerous outstanding committed operations therefore consume memory. Committed snapshots are not automatically pruned, and audit logs are not automatically rotated; integrations are responsible for retention once rollback/history is no longer required.
 
 ### Availability attacks
 

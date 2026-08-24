@@ -4,7 +4,7 @@ AgentSafeFS is security-sensitive software. Reports that involve filesystem esca
 
 ## Supported versions
 
-Security fixes currently target the latest `0.1.x` release line.
+Security fixes currently target the latest `0.2.x` release line.
 
 ## Reporting a vulnerability
 
@@ -34,7 +34,9 @@ A regression includes behavior where AgentSafeFS:
 - applies a rollback snapshot before verifying its integrity,
 - reports a successful commit without readback verification,
 - returns an audit/verification failure after mutation without first attempting verified recovery,
-- recovery overwrites or deletes a target that changed again after the failed mutation/rollback.
+- recovery overwrites or deletes a target that changed again after the failed mutation/rollback,
+- the CLI auto-loads repository-controlled configuration without an explicit `--config`,
+- the CLI permits an approval-required write through a generic yes/no flag instead of exact-target confirmation.
 
 ## Out of scope
 

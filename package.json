@@ -1,7 +1,7 @@
 {
   "name": "agentsafefs",
-  "version": "0.1.0",
-  "description": "Guarded filesystem writes for AI agents and automation.",
+  "version": "0.2.0",
+  "description": "Guarded filesystem writes and standalone CLI for AI agents, coding assistants, MCP tools, and automation.",
   "type": "module",
   "private": true,
   "license": "Apache-2.0",
@@ -40,7 +40,9 @@
   "scripts": {
     "test": "node --test",
     "test:coverage": "node --experimental-test-coverage --test",
-    "check": "node --check src/errors.mjs && node --check src/path-safety.mjs && node --check src/policy.mjs && node --check src/transaction.mjs && node --check src/index.mjs"
+    "check": "node --check src/errors.mjs && node --check src/path-safety.mjs && node --check src/policy.mjs && node --check src/transaction.mjs && node --check src/index.mjs && node --check src/cli.mjs && node --check scripts/build-sea.mjs && node --check scripts/verify-release-tag.mjs && node --check scripts/render-release-notes.mjs",
+    "test:cli": "node --test test/cli.test.mjs",
+    "build:binary": "node scripts/build-sea.mjs"
   },
   "repository": {
     "type": "git",
@@ -49,5 +51,12 @@
   "bugs": {
     "url": "https://github.com/tomaszteee/AgentSafeFS/issues"
   },
-  "homepage": "https://github.com/tomaszteee/AgentSafeFS#readme"
+  "homepage": "https://github.com/tomaszteee/AgentSafeFS#readme",
+  "bin": {
+    "agentsafefs": "./src/cli.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "postject": "1.0.0-alpha.6"
+  }
 }

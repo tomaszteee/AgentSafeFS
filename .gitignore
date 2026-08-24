@@ -1,5 +1,6 @@
 node_modules/
 coverage/
+dist/
 .agentsafefs/
 .local-shell-mcp/
 oss-config.yaml

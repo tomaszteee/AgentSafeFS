@@ -4,6 +4,25 @@ All notable changes to AgentSafeFS will be documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project intends to use Semantic Versioning.
 
+## [0.2.0] - 2026-08-24
+
+### Added
+
+- standalone `agentsafefs` CLI with `plan`, `write`, and `doctor` commands,
+- exact-target CLI approval via `--approve` rather than a generic yes/no bypass,
+- explicit JSON configuration support with no silent config auto-loading,
+- binary/text/stdin content inputs and machine-readable `--json` output,
+- stable CLI exit-code classes for usage, policy/path denial, approval, and integrity/conflict failures,
+- native Node SEA build pipeline for Windows x64/ARM64, Linux x64/ARM64, and macOS x64/ARM64,
+- GitHub Release automation with SHA-256 checksums, SPDX SBOM export, and build-provenance attestations,
+- CLI documentation and security-focused CLI regression tests.
+
+### Changed
+
+- package version advanced to `0.2.0` and now exposes the `agentsafefs` bin entry,
+- release builds pin Node.js 22.23.2 and build each executable natively on its target GitHub-hosted runner,
+- macOS standalone binaries are ad-hoc signed after SEA injection; Windows signing status is documented explicitly.
+
 ## [0.1.0] - 2026-08-24
 
 ### Added
