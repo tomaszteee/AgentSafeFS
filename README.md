@@ -3,9 +3,11 @@
 [![CI](https://github.com/tomaszteee/AgentSafeFS/actions/workflows/ci.yml/badge.svg)](https://github.com/tomaszteee/AgentSafeFS/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](./LICENSE)
 ![Node.js >=22](https://img.shields.io/badge/Node.js-%3E%3D22-339933?logo=node.js&logoColor=white)
-![Status](https://img.shields.io/badge/status-0.1.0%20release%20candidate-orange)
+[![Latest release](https://img.shields.io/github/v/release/tomaszteee/AgentSafeFS?display_name=tag)](https://github.com/tomaszteee/AgentSafeFS/releases/latest)
 
 **Guarded filesystem writes for AI agents, coding assistants, MCP tools, and automation.**
+
+[API](./docs/API.md) · [Threat model](./docs/THREAT_MODEL.md) · [Security](./SECURITY.md) · [Contributing](./CONTRIBUTING.md) · [Discussions](https://github.com/tomaszteee/AgentSafeFS/discussions)
 
 AgentSafeFS is a security-focused Node.js library that makes AI-driven file writes explicit, reviewable, conflict-aware, auditable, and rollback-capable — with no runtime dependencies.
 
@@ -30,7 +32,7 @@ The project intentionally does one thing: make individual file writes harder to 
 
 ## Status
 
-`0.1.0` is an early security-focused release candidate. The API is small on purpose and may still change before `1.0.0`.
+`0.1.0` is the first public security-focused release. The API is small on purpose and may still change before `1.0.0`.
 
 The package is marked `private: true` only to prevent accidental npm publication during the initial GitHub release. The source repository itself is licensed under Apache-2.0.
 

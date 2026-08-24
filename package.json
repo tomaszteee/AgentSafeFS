@@ -28,12 +28,26 @@
     "automation",
     "rollback",
     "safe-write",
-    "path-traversal"
+    "path-traversal",
+    "agentic-ai",
+    "coding-assistant",
+    "mcp",
+    "mcp-server",
+    "filesystem-security",
+    "developer-tools"
   ],
   "sideEffects": false,
   "scripts": {
     "test": "node --test",
     "test:coverage": "node --experimental-test-coverage --test",
     "check": "node --check src/errors.mjs && node --check src/path-safety.mjs && node --check src/policy.mjs && node --check src/transaction.mjs && node --check src/index.mjs"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomaszteee/AgentSafeFS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tomaszteee/AgentSafeFS/issues"
+  },
+  "homepage": "https://github.com/tomaszteee/AgentSafeFS#readme"
 }

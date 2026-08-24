@@ -1,0 +1,37 @@
+name: Feature request
+description: Propose a focused improvement that fits AgentSafeFS scope.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        AgentSafeFS is intentionally filesystem-only and security-focused. Please read SCOPE.md before proposing broader agent features.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What concrete problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the smallest API or behavior change that would solve it.
+    validations:
+      required: true
+  - type: textarea
+    id: security
+    attributes:
+      label: Security implications
+      description: Note any effect on path validation, approval, rollback, audit, or threat boundaries.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I read SCOPE.md and this request fits the filesystem safety scope.
+          required: true
+        - label: I searched existing issues first.
+          required: true
