@@ -19,6 +19,8 @@
     "SCOPE.md",
     "CHANGELOG.md",
     "docs/",
+    "CODE_SIGNING_POLICY.md",
+    "PRIVACY.md",
     "LICENSE"
   ],
   "keywords": [
@@ -57,6 +59,7 @@
   },
   "devDependencies": {
     "esbuild": "0.28.2",
-    "postject": "1.0.0-alpha.6"
+    "postject": "1.0.0-alpha.6",
+    "resedit": "^3.0.2"
   }
 }

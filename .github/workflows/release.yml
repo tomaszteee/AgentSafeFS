@@ -16,6 +16,7 @@ jobs:
   build:
     name: Build ${{ matrix.asset }}
     permissions:
+      actions: read
       contents: read
       id-token: write
       attestations: write
@@ -54,6 +55,38 @@ jobs:
         run: npm run build:binary
       - name: Smoke test standalone binary
         run: ./dist/${{ matrix.asset }} doctor --root . --json
+      - name: Upload unsigned Windows artifact for SignPath origin verification
+        if: runner.os == 'Windows' && vars.SIGNPATH_ENABLED == 'true'
+        id: upload-unsigned
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        with:
+          name: unsigned-${{ matrix.asset }}
+          path: dist/${{ matrix.asset }}
+          if-no-files-found: error
+          retention-days: 1
+      - name: Submit Windows artifact to SignPath Foundation signing
+        if: runner.os == 'Windows' && vars.SIGNPATH_ENABLED == 'true'
+        uses: signpath/github-action-submit-signing-request@c92b958760219087e01f8d67a1669ed57afe2627 # v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG }}
+          github-artifact-id: ${{ steps.upload-unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: dist/signed
+      - name: Replace unsigned Windows binary with SignPath-signed binary
+        if: runner.os == 'Windows' && vars.SIGNPATH_ENABLED == 'true'
+        shell: pwsh
+        run: |
+          $asset = '${{ matrix.asset }}'
+          $signed = Get-ChildItem -Path dist/signed -Recurse -File -Filter $asset | Select-Object -First 1
+          if (-not $signed) { throw "SignPath output did not contain $asset" }
+          Copy-Item -LiteralPath $signed.FullName -Destination (Join-Path dist $asset) -Force
+          $signature = Get-AuthenticodeSignature -FilePath (Join-Path dist $asset)
+          if ($signature.Status -ne 'Valid') { throw "Invalid Authenticode signature: $($signature.Status)" }
+          Write-Host "Signed by: $($signature.SignerCertificate.Subject)"
       - name: Attest native binary provenance
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
         with:
@@ -93,6 +126,8 @@ jobs:
           path: dist/release
           merge-multiple: true
       - name: Build package archive
+        env:
+          SIGNPATH_ENABLED: ${{ vars.SIGNPATH_ENABLED }}
         run: |
           npm pack --pack-destination dist/release
           node scripts/render-release-notes.mjs > dist/release-notes.md

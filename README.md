@@ -7,7 +7,7 @@
 
 **Guarded filesystem writes for AI agents, coding assistants, MCP tools, and automation.**
 
-[CLI](./docs/CLI.md) · [API](./docs/API.md) · [Threat model](./docs/THREAT_MODEL.md) · [Security](./SECURITY.md) · [Contributing](./CONTRIBUTING.md) · [Discussions](https://github.com/tomaszteee/AgentSafeFS/discussions)
+[CLI](./docs/CLI.md) · [API](./docs/API.md) · [Threat model](./docs/THREAT_MODEL.md) · [Security](./SECURITY.md) · [Code signing policy](./CODE_SIGNING_POLICY.md) · [Privacy](./PRIVACY.md) · [Contributing](./CONTRIBUTING.md) · [Discussions](https://github.com/tomaszteee/AgentSafeFS/discussions)
 
 AgentSafeFS is a security-focused Node.js library **and standalone CLI** that makes AI-driven file writes explicit, reviewable, conflict-aware, auditable, and rollback-capable. The library has no runtime dependencies.
 
@@ -91,6 +91,10 @@ Example on Windows:
 Higher-risk writes do not accept a generic `--yes`. They require the exact guarded target through `--approve <path>`. Use `--json` for automation and MCP/tool integration. Configuration files are loaded only when explicitly selected with `--config`, avoiding silent repository-controlled policy changes.
 
 Release assets include SHA-256 checksums, an SPDX SBOM, and GitHub build-provenance attestations. See [docs/CLI.md](./docs/CLI.md) for commands, exit codes, configuration, verification, and platform signing notes.
+
+### Code signing policy
+
+AgentSafeFS is applying to the SignPath Foundation free Open Source code-signing program for Windows Authenticode signing. **Free code signing provided by SignPath.io, certificate by SignPath Foundation** once the application is approved and the signing integration is enabled. Until then, Windows release notes explicitly identify the binaries as unsigned. See [CODE_SIGNING_POLICY.md](./CODE_SIGNING_POLICY.md) and [PRIVACY.md](./PRIVACY.md).
 
 ## Library quick start from a clone
 

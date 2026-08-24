@@ -1,0 +1,9 @@
+# Release and signing-sensitive files
+/.github/workflows/ @tomaszteee
+/.github/CODEOWNERS @tomaszteee
+/CODE_SIGNING_POLICY.md @tomaszteee
+/PRIVACY.md @tomaszteee
+/scripts/ @tomaszteee
+/package.json @tomaszteee
+/package-lock.json @tomaszteee
+/.signpath/ @tomaszteee
