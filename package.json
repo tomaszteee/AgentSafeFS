@@ -1,9 +1,8 @@
 {
   "name": "agentsafefs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Guarded filesystem writes and standalone CLI for AI agents, coding assistants, MCP tools, and automation.",
   "type": "module",
-  "private": true,
   "license": "Apache-2.0",
   "engines": {
     "node": ">=22"
@@ -55,7 +54,7 @@
   },
   "homepage": "https://github.com/tomaszteee/AgentSafeFS#readme",
   "bin": {
-    "agentsafefs": "./src/cli.mjs"
+    "agentsafefs": "src/cli.mjs"
   },
   "devDependencies": {
     "esbuild": "0.28.2",

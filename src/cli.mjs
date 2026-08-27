@@ -5,7 +5,7 @@ import process from 'node:process';
 import { isSea } from 'node:sea';
 import { AgentSafeFS, AgentSafeFSError } from './index.mjs';
 
-const CLI_VERSION = '0.2.0';
+const CLI_VERSION = '0.2.1';
 
 class CliError extends Error {
   constructor(code, message, details = null) {

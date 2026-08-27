@@ -4,7 +4,17 @@ All notable changes to AgentSafeFS will be documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project intends to use Semantic Versioning.
 
-## [0.2.0] - 2026-08-24
+## [0.2.1] - 2026-08-27
+
+### Added
+
+- public npm distribution as `agentsafefs`, including verified clean-install and `npx` usage,
+- npm Trusted Publishing workflow support for GitHub Actions using OIDC.
+
+### Changed
+
+- Quick Start is moved to the top of the README and uses the verified npm installation path,
+- release publishing can use short-lived OIDC credentials instead of a long-lived npm publishing token.`r`n`r`n## [0.2.0] - 2026-08-24
 
 ### Added
 

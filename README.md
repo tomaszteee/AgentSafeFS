@@ -7,11 +7,39 @@
 
 **Guarded filesystem writes for AI agents, coding assistants, MCP tools, and automation.**
 
-[CLI](./docs/CLI.md) · [API](./docs/API.md) · [Threat model](./docs/THREAT_MODEL.md) · [Security](./SECURITY.md) · [Code signing policy](./CODE_SIGNING_POLICY.md) · [Privacy](./PRIVACY.md) · [Contributing](./CONTRIBUTING.md) · [Discussions](https://github.com/tomaszteee/AgentSafeFS/discussions)
-
 AgentSafeFS is a security-focused Node.js library **and standalone CLI** that makes AI-driven file writes explicit, reviewable, conflict-aware, auditable, and rollback-capable. The library has no runtime dependencies.
 
-It is designed for agentic AI, coding assistants, MCP servers, developer tools, and automation that need to modify a workspace without casually escaping the intended root or overwriting newer data.
+## Quick Start
+
+Requires Node.js 22+.
+
+```bash
+npm install agentsafefs
+```
+
+Minimal library example:
+
+```js
+import { AgentSafeFS } from 'agentsafefs';
+
+const safeFs = new AgentSafeFS({ root: process.cwd() });
+const proposal = safeFs.proposeWrite({ path: 'notes.txt', content: 'hello\n' });
+const result = safeFs.commit(proposal.operationId, {
+  confirmedPath: proposal.risk.requiresApproval ? proposal.path : null,
+});
+
+console.log(result.sha256After);
+```
+
+Minimal CLI check after installation:
+
+```bash
+npx agentsafefs doctor --root .
+```
+
+Standalone Windows/Linux/macOS binaries remain available from [GitHub Releases](https://github.com/tomaszteee/AgentSafeFS/releases/latest).
+
+[CLI](./docs/CLI.md) · [API](./docs/API.md) · [Threat model](./docs/THREAT_MODEL.md) · [Security](./SECURITY.md) · [Code signing policy](./CODE_SIGNING_POLICY.md) · [Privacy](./PRIVACY.md) · [Contributing](./CONTRIBUTING.md) · [Discussions](https://github.com/tomaszteee/AgentSafeFS/discussions)
 
 ## Why AgentSafeFS
 
@@ -34,7 +62,7 @@ The project intentionally does one thing: make individual file writes harder to 
 
 `0.2.0` adds a standalone CLI and native release binaries while keeping the security-focused API deliberately small. The API and CLI may still evolve before `1.0.0`.
 
-The package remains marked `private: true` to prevent accidental npm registry publication. GitHub Releases are the distribution source for the standalone binaries and package archive; the source repository is Apache-2.0 licensed.
+The npm package is prepared for public distribution under the `agentsafefs` name. GitHub Releases remain the distribution source for standalone binaries; the source repository is Apache-2.0 licensed.
 
 ## What it protects against
 
@@ -96,7 +124,7 @@ Release assets include SHA-256 checksums, an SPDX SBOM, and GitHub build-provena
 
 AgentSafeFS is applying to the SignPath Foundation free Open Source code-signing program for Windows Authenticode signing. **Free code signing provided by SignPath.io, certificate by SignPath Foundation** once the application is approved and the signing integration is enabled. Until then, Windows release notes explicitly identify the binaries as unsigned. See [CODE_SIGNING_POLICY.md](./CODE_SIGNING_POLICY.md) and [PRIVACY.md](./PRIVACY.md).
 
-## Library quick start from a clone
+## Extended library example
 
 Requires Node.js 22+.
 
@@ -105,7 +133,7 @@ npm test
 ```
 
 ```js
-import { AgentSafeFS } from './src/index.mjs';
+import { AgentSafeFS } from 'agentsafefs';
 
 const safeFs = new AgentSafeFS({
   root: 'C:/workspace',
