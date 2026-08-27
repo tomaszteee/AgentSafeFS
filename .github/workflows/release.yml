@@ -58,7 +58,7 @@ jobs:
       - name: Upload unsigned Windows artifact for SignPath origin verification
         if: runner.os == 'Windows' && vars.SIGNPATH_ENABLED == 'true'
         id: upload-unsigned
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: unsigned-${{ matrix.asset }}
           path: dist/${{ matrix.asset }}
@@ -92,7 +92,7 @@ jobs:
         with:
           subject-path: dist/${{ matrix.asset }}
       - name: Upload binary artifact
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: binary-${{ matrix.asset }}
           path: dist/${{ matrix.asset }}
